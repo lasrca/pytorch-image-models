@@ -12,6 +12,9 @@ import argparse
 import numpy as np
 
 
+torch.cuda.empty_cache()
+
+
 if torch.cuda.is_available():
     device = "cuda"
 else:
