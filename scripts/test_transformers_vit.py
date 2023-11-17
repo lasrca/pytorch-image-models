@@ -108,6 +108,8 @@ def main():
     inputs_cap = process_input(caps_imgs, processor)
     inputs_stream = process_input(streams_imgs, processor)
 
+    torch.cuda.empty_cache()
+
     print("Computing features...")
     outputs_cap = get_vit_features(model, inputs_cap.to(device))
     outputs_stream = get_vit_features(model, inputs_stream.to(device))
