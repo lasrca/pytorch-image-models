@@ -119,7 +119,7 @@ def main():
                               outputs_stream)
 
     print("Svaing results to :" , path_to_results)
-    all_res.to_csv(path_to_results)
+    pd.DataFrame(all_res).to_csv(path_to_results)
 
 
 if __name__ == '__main__':
