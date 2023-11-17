@@ -20,6 +20,8 @@ else:
 def load_image(image_filename):
     # print(image_filename)
     image = Image.open(image_filename)
+    image = np.array(image)
+    image = image[:, :, :3]
     image.close()
     return image
 
