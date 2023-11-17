@@ -99,10 +99,10 @@ def main():
     model = model.to(device)
 
     print("Loading images...")
-    caps_imgs = load_images_folder(caps_path)[:50]
-    caps_filenames = get_filenames(caps_path)[:50]
-    streams_imgs = load_images_folder(streams_path)[:50]
-    streams_filenames = get_filenames(streams_path)[:50]
+    caps_imgs = load_images_folder(caps_path)[:10]
+    caps_filenames = get_filenames(caps_path)[:10]
+    streams_imgs = load_images_folder(streams_path)[:10]
+    streams_filenames = get_filenames(streams_path)[:10]
 
     print("Processing input...")
     inputs_cap = process_input(caps_imgs, processor)
