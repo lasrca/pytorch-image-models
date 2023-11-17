@@ -5,7 +5,6 @@ import requests
 import glob
 import os
 from scipy import spatial
-from IPython.display import Image, display
 import pandas as pd
 from tqdm import tqdm
 import torch
