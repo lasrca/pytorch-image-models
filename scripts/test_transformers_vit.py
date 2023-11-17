@@ -86,24 +86,30 @@ def main():
     streams_path = args.streams_path
     path_to_results = args.results_path
 
+    print("Loading model and processor...")
     processor = ViTImageProcessor.from_pretrained(model_name)
     model = ViTForImageClassification.from_pretrained(model_name)
     model = model.to(device)
 
+    print("Loading images...")
     caps_imgs = load_images_folder(caps_path)
     caps_filenames = get_filenames(caps_path)
     streams_imgs = load_images_folder(streams_path)
     streams_filenames = get_filenames(streams_path)
 
+    print("Processing input...")
     inputs_cap = process_input(caps_imgs, processor)
     inputs_stream = process_input(streams_imgs, processor)
 
+    print("Computing features...")
     outputs_cap = get_vit_features(model, inputs_cap.to(device))
     outputs_stream = get_vit_features(model, inputs_stream.to(device))
 
+    print("Getting all results...")
     all_res = get_all_results(caps_filenames, caps_imgs, outputs_cap, streams_filenames, streams_imgs,
                               outputs_stream)
 
+    print("Svaing results to :" , path_to_results)
     all_res.to_csv(path_to_results)
 
 
