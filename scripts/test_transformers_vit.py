@@ -21,10 +21,11 @@ else:
 def load_image(image_filename):
     # print(image_filename)
     image = Image.open(image_filename)
-    image = np.array(image)
-    image = image[:, :, :3]
+    img = image.copy()
     image.close()
-    return image
+    img = np.array(img)
+    img = img[:, :, :3]
+    return img
 
 
 def load_images_folder(folder_path):
