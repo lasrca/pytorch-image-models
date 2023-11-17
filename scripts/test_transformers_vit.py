@@ -1,6 +1,6 @@
 import transformers
 from transformers import ViTImageProcessor, ViTForImageClassification
-import PIL
+from PIL import Image
 import requests
 import glob
 import os
@@ -19,7 +19,8 @@ else:
 
 def load_image(image_filename):
     # print(image_filename)
-    image = PIL.Image.open(image_filename)
+    image = Image.open(image_filename)
+    image.close()
     return image
 
 
