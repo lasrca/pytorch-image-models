@@ -9,6 +9,7 @@ import pandas as pd
 from tqdm import tqdm
 import torch
 import argparse
+import numpy as np
 
 
 if torch.cuda.is_available():
