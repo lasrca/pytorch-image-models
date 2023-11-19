@@ -77,7 +77,7 @@ def get_all_results(caps_filenames, caps_images, outputs_caps, streams_filenames
         for stream_filename, stream_img, stream in zip(streams_filenames, streams_images, outputs_streams):
             cosine_similarity = get_cosine_similarity_for_two_images(cap.tolist(), stream.tolist())
             stream_sess_id = stream_filename.split("_")[0]
-            results[cap_sess_id][stream_sess_id] = cosine_similarity
+            results[cap_filename][stream_filename] = cosine_similarity
     return results
 
 
@@ -100,10 +100,10 @@ def main():
     model = model.to(device)
 
     print("Loading images...")
-    caps_imgs = load_images_folder(caps_path)
-    caps_filenames = get_filenames(caps_path)
-    streams_imgs = load_images_folder(streams_path)
-    streams_filenames = get_filenames(streams_path)
+    caps_imgs = load_images_folder(caps_path)[:5]
+    caps_filenames = get_filenames(caps_path)[:5]
+    streams_imgs = load_images_folder(streams_path)[:5]
+    streams_filenames = get_filenames(streams_path)[:5]
 
     print("Processing input...")
     inputs_cap = process_input(caps_imgs, processor)
