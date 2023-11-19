@@ -73,7 +73,7 @@ def get_all_results(caps_filenames, caps_images, outputs_caps, streams_filenames
     results = {}
     for cap_filename, cap_img, cap in zip(caps_filenames, caps_images, outputs_caps):
         cap_sess_id = cap_filename.split("_")[0]
-        results[cap_sess_id] = {}
+        results[cap_filename] = {}
         for stream_filename, stream_img, stream in zip(streams_filenames, streams_images, outputs_streams):
             cosine_similarity = get_cosine_similarity_for_two_images(cap.tolist(), stream.tolist())
             stream_sess_id = stream_filename.split("_")[0]
