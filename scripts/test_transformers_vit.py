@@ -50,8 +50,9 @@ def process_input(images_list, processor):
 
 
 def get_vit_features(model, inputs):
-    outputs = model(**inputs)
-    logits = outputs.logits
+    with torch.no_grad():
+        outputs = model(**inputs)
+        logits = outputs.logits
     return logits
 
 
@@ -111,8 +112,8 @@ def main():
     torch.cuda.empty_cache()
 
     print("Computing features...")
-    outputs_cap = get_vit_features(model, inputs_cap.to(device))
-    outputs_stream = get_vit_features(model, inputs_stream.to(device))
+    outputs_cap = get_vit_features(model, inputs_cap.to(device, torch.float16))
+    outputs_stream = get_vit_features(model, inputs_stream.to(device, torch.float16))
 
     print("Getting all results...")
     all_res = get_all_results(caps_filenames, caps_imgs, outputs_cap, streams_filenames, streams_imgs,
