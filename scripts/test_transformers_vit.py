@@ -1,6 +1,7 @@
 import transformers
 from transformers import ViTImageProcessor, ViTForImageClassification
 from transformers import AutoImageProcessor, BeitForImageClassification
+from  torch.cuda.amp import autocast
 from PIL import Image
 import requests
 import glob
@@ -52,8 +53,9 @@ def process_input(images_list, processor):
 
 def get_vit_features(model, inputs):
     with torch.no_grad():
-        outputs = model(**inputs)
-        logits = outputs.logits
+        with autocast():
+            outputs = model(**inputs)
+            logits = outputs.logits
     return logits
 
 
