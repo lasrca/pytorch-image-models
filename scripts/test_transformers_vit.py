@@ -1,6 +1,6 @@
 import transformers
 from transformers import ViTImageProcessor, ViTForImageClassification
-from transformers import AutoImageProcessor, BeitForMaskedImageModeling
+from transformers import AutoImageProcessor, BeitForImageClassification
 from PIL import Image
 import requests
 import glob
