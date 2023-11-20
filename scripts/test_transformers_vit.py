@@ -73,6 +73,8 @@ def get_filenames(source_dir):
 
 
 def get_all_results(caps_filenames, caps_images, outputs_caps, streams_filenames, streams_images, outputs_streams):
+    print("outputs_cap shape: ", len(outputs_caps))
+    print("outputs_streams shape: ", len(outputs_streams))
     results = {}
     for cap_filename, cap_img, cap in zip(caps_filenames, caps_images, outputs_caps):
         cap_sess_id = cap_filename.split("_")[0]+"_cap"
