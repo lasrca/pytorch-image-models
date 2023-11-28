@@ -87,7 +87,7 @@ def get_all_results(caps_filenames, outputs_caps, streams_filenames, outputs_str
     return results
 
 
-def run_model_on_batch(list_images):
+def run_model_on_batch(list_images, processor, model):
     outputs = []
     for img in tqdm(list_images):
         # print("Processing input...")
@@ -128,11 +128,11 @@ def main():
 
 
     print("Processing captures...")
-    outputs_cap = run_model_on_batch(caps_imgs)
+    outputs_cap = run_model_on_batch(caps_imgs, processor, model)
 
 
     print("Processing streams...")
-    outputs_stream = run_model_on_batch(streams_imgs)
+    outputs_stream = run_model_on_batch(streams_imgs, processor, model)
 
     # inputs_cap = process_input(caps_imgs, processor)
     # inputs_stream = process_input(streams_imgs, processor)
