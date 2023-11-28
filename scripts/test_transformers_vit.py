@@ -44,8 +44,8 @@ def load_images_folder(folder_path):
 
 
 def process_input(images_list, processor):
-    print("Number of images")
-    print(len(images_list))
+    # print("Number of images")
+    # print(len(images_list))
     inputs = processor(images=images_list, return_tensors="pt")
     return inputs
 
@@ -112,19 +112,22 @@ def main():
     streams_filenames = get_filenames(streams_path)
 
     outputs_cap = []
-    for cap in caps_imgs:
-        print("Processing input...")
+    print("Processing captures...")
+    for cap in tqdm(caps_imgs):
+        # print("Processing input...")
         input_cap = process_input(cap, processor)
-        print("Computing features...")
+        # print("Computing features...")
         output_cap = get_vit_features(model, input_cap.to(device, torch.float16))
         outputs_cap.append(output_cap)
 
-    for stream in streams_imgs:
+    outputs_stream = []
+    print("Processing streams...")
+    for stream in tqdm(streams_imgs):
         print("Processing input...")
         input_stream = process_input(stream, processor)
         print("Computing features...")
         output_stream = get_vit_features(model, input_stream.to(device, torch.float16))
-        outputs_cap.append(output_stream)
+        outputs_stream.append(output_stream)
     # inputs_cap = process_input(caps_imgs, processor)
     # inputs_stream = process_input(streams_imgs, processor)
 
