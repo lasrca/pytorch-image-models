@@ -76,6 +76,7 @@ def get_all_results(caps_filenames, caps_images, outputs_caps, streams_filenames
     print("outputs_streams shape: ", len(outputs_streams))
 
     similarities = cosine_similarity(outputs_caps, outputs_streams)
+    print(similarities.shape)
 
     results = {}
     for cap_filename, row in zip(caps_filenames, similarities):
