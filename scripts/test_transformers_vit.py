@@ -76,7 +76,7 @@ def get_all_results(caps_filenames, caps_images, outputs_caps, streams_filenames
     print("outputs_streams shape: ", len(outputs_streams))
     outputs_caps =  [t.detach().cpu().numpy() for t in outputs_caps]
     outputs_streams = [t.detach().cpu().numpy() for t in outputs_streams]
-    print(outputs_caps.shape)
+    print(outputs_caps[0].shape)
     similarities = cosine_similarity(outputs_caps, outputs_streams)
 
     results = {}
