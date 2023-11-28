@@ -48,6 +48,7 @@ def process_input(images_list, processor):
     print("Number of images")
     print(len(images_list))
     inputs = processor(images=images_list, return_tensors="pt")
+    [img.close() for img in images_list]
     return inputs
 
 
@@ -126,7 +127,7 @@ def main():
     all_res = get_all_results(caps_filenames, caps_imgs, outputs_cap, streams_filenames, streams_imgs,
                               outputs_stream)
 
-    print("Svaing results to :" , path_to_results)
+    print("Saving results to :" , path_to_results)
     pd.DataFrame(all_res).to_csv(path_to_results)
 
 
