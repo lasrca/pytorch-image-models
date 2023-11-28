@@ -97,7 +97,7 @@ def run_model_on_batch(list_images, processor, model):
         input = process_input(img, processor)
         # print("Computing features...")
         torch.cuda.empty_cache()
-        print(input.shape)
+        print(input.size)
         output = get_vit_features(model, input.to(device, torch.float16))
         outputs.append(output.cpu().detach().numpy())
     outputs = np.vstack(outputs)
