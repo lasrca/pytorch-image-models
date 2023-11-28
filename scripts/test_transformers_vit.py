@@ -48,7 +48,6 @@ def process_input(images_list, processor):
     print("Number of images")
     print(len(images_list))
     inputs = processor(images=images_list, return_tensors="pt")
-    [img.close() for img in images_list]
     return inputs
 
 
