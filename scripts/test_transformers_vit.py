@@ -36,7 +36,6 @@ def load_image(image_filename):
 def load_images_folder(folder_path):
     images = []
     for img_filename in tqdm(os.listdir(folder_path)):
-        print(img_filename)
         if img_filename==".DS_Store":
             continue
         img = load_image(os.path.join(folder_path, img_filename))
@@ -105,6 +104,7 @@ def main():
     # model = ViTForImageClassification.from_pretrained(model_name)
     model = BeitForImageClassification.from_pretrained(model_name)
     model = model.to(device)
+    model = torch.compile(model)
 
     print("Loading images...")
     caps_imgs = load_images_folder(caps_path)
