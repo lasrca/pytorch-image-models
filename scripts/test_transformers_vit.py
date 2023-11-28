@@ -59,6 +59,7 @@ def get_vit_features(model, inputs):
             outputs = model(**inputs)
             # logits = outputs.logits
             #If CLIP is used:
+            print(outputs.keys())
             image_embedding = outputs.last_hidden_state[:, 0, :]
             print(image_embedding.shape)
     return image_embedding
