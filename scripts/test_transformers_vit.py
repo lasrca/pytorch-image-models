@@ -82,7 +82,7 @@ def get_all_results(caps_filenames, caps_images, outputs_caps, streams_filenames
     for i, cap_filename in enumerate(caps_filenames):
         results[cap_filename] = {}
         for j, stream_filename in enumerate(streams_filenames):
-            results[cap_filename][stream_filename] = results[i, j]
+            results[cap_filename][stream_filename] = similarities[i, j]
 
     # for cap_filename, cap_img, cap in zip(caps_filenames, caps_images, outputs_caps):
     #     cap_sess_id = cap_filename.split("_")[0]+"_cap"
