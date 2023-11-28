@@ -144,7 +144,7 @@ def main():
     # outputs_stream = get_vit_features(model, inputs_stream.to(device, torch.float16))
 
     print("Getting all results...")
-    all_res = get_all_results(caps_filenames, caps_imgs, outputs_cap, streams_filenames, streams_imgs,
+    all_res = get_all_results(caps_filenames, outputs_cap, streams_filenames,
                               outputs_stream)
 
     print("Saving results to :" , path_to_results)
