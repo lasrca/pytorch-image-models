@@ -128,6 +128,7 @@ def main():
         # print("Computing features...")
         output_cap = get_vit_features(model, input_cap.to(device, torch.float16))
         outputs_cap.append(output_cap.cpu().detach().numpy())
+    outputs_cap = np.vstack(outputs_cap)
 
     outputs_stream = []
     print("Processing streams...")
@@ -137,6 +138,7 @@ def main():
         # print("Computing features...")
         output_stream = get_vit_features(model, input_stream.to(device, torch.float16))
         outputs_stream.append(output_stream.cpu().detach().numpy())
+    outputs_stream = np.vstack(outputs_stream)
     # inputs_cap = process_input(caps_imgs, processor)
     # inputs_stream = process_input(streams_imgs, processor)
 
