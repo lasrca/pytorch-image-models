@@ -75,7 +75,7 @@ def get_all_results(caps_filenames, outputs_caps, streams_filenames, outputs_str
     print("outputs_cap shape: ", len(outputs_caps))
     print("outputs_streams shape: ", len(outputs_streams))
 
-    similarities = manhattan_distances(outputs_caps, outputs_streams)
+    similarities = cosine_similarity(outputs_caps, outputs_streams)
     print(similarities.shape)
 
     results = {}
