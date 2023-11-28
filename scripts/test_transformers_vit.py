@@ -155,6 +155,18 @@ def main():
     print("Saving results to :" , path_to_results)
     pd.DataFrame(all_res).to_csv(path_to_results)
 
+    img1 = caps_imgs[3]
+    img_filename1 = caps_filenames[3]
+    stream1 = streams_imgs[2]
+    stream_filename1 = streams_filenames[2]
+    input_cap1 = process_input(img1, processor)
+    output_cap1 = get_vit_features(model, input_cap1.to(device, torch.float16))
+    input_stream1 = process_input(stream1, processor)
+    output_stream1 = get_vit_features(model, input_stream1.to(device, torch.float16))
+    print(img_filename1)
+    print(stream_filename1)
+    print(get_cosine_similarity_for_two_images(output_cap1.tolist(), output_stream1.tolist()))
+
 
 if __name__ == '__main__':
     main()
