@@ -1,6 +1,7 @@
 import transformers
 from transformers import ViTImageProcessor, ViTForImageClassification
 from transformers import AutoImageProcessor, BeitForImageClassification
+from transformers import CLIPProcessor, CLIPModel
 from  torch.cuda.amp import autocast
 from PIL import Image
 import requests
@@ -54,8 +55,10 @@ def get_vit_features(model, inputs):
     with torch.no_grad():
         with autocast():
             outputs = model(**inputs)
-            logits = outputs.logits
-    return logits
+            # logits = outputs.logits
+            image_embedding = outputs.last_hidden_state[:, 0, :]
+            print(image_embedding.shape)
+    return image_embedding
 
 
 def get_cosine_similarity_for_two_images(features_1, features_2):
@@ -115,16 +118,20 @@ def main():
 
     print("Loading model and processor...")
     # processor = ViTImageProcessor.from_pretrained(model_name)
-    processor = AutoImageProcessor.from_pretrained(model_name)
+    # processor = AutoImageProcessor.from_pretrained(model_name)
+    processor = CLIPProcessor.from_pretrained(model_name)
     # model = ViTForImageClassification.from_pretrained(model_name)
-    model = BeitForImageClassification.from_pretrained(model_name)
+    # model = BeitForImageClassification.from_pretrained(model_name)
+    model = CLIPModel.from_pretrained(model_name)
+
     model = model.to(device)
 
+
     print("Loading images...")
-    caps_imgs = load_images_folder(caps_path)
-    caps_filenames = get_filenames(caps_path)
-    streams_imgs = load_images_folder(streams_path)
-    streams_filenames = get_filenames(streams_path)
+    caps_imgs = load_images_folder(caps_path)[:5]
+    caps_filenames = get_filenames(caps_path)[:5]
+    streams_imgs = load_images_folder(streams_path)[:5]
+    streams_filenames = get_filenames(streams_path)[:5]
 
 
     print("Processing captures...")
