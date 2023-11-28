@@ -114,10 +114,10 @@ def main():
     path_to_results = args.results_path
 
     print("Loading model and processor...")
-    # processor = ViTImageProcessor.from_pretrained(model_name)
-    processor = AutoImageProcessor.from_pretrained(model_name)
-    # model = ViTForImageClassification.from_pretrained(model_name)
-    model = BeitForImageClassification.from_pretrained(model_name)
+    processor = ViTImageProcessor.from_pretrained(model_name)
+    # processor = AutoImageProcessor.from_pretrained(model_name)
+    model = ViTForImageClassification.from_pretrained(model_name)
+    # model = BeitForImageClassification.from_pretrained(model_name)
     model = model.to(device)
 
     print("Loading images...")
