@@ -104,7 +104,6 @@ def main():
     # model = ViTForImageClassification.from_pretrained(model_name)
     model = BeitForImageClassification.from_pretrained(model_name)
     model = model.to(device)
-    model = torch.compile(model)
 
     print("Loading images...")
     caps_imgs = load_images_folder(caps_path)
@@ -112,15 +111,28 @@ def main():
     streams_imgs = load_images_folder(streams_path)
     streams_filenames = get_filenames(streams_path)
 
-    print("Processing input...")
-    inputs_cap = process_input(caps_imgs, processor)
-    inputs_stream = process_input(streams_imgs, processor)
+    outputs_cap = []
+    for cap in caps_imgs:
+        print("Processing input...")
+        input_cap = process_input(cap, processor)
+        print("Computing features...")
+        output_cap = get_vit_features(model, input_cap.to(device, torch.float16))
+        outputs_cap.append(output_cap)
+
+    for stream in streams_imgs:
+        print("Processing input...")
+        input_stream = process_input(stream, processor)
+        print("Computing features...")
+        output_stream = get_vit_features(model, input_stream.to(device, torch.float16))
+        outputs_cap.append(output_stream)
+    # inputs_cap = process_input(caps_imgs, processor)
+    # inputs_stream = process_input(streams_imgs, processor)
 
     torch.cuda.empty_cache()
 
-    print("Computing features...")
-    outputs_cap = get_vit_features(model, inputs_cap.to(device, torch.float16))
-    outputs_stream = get_vit_features(model, inputs_stream.to(device, torch.float16))
+    # print("Computing features...")
+    # outputs_cap = get_vit_features(model, inputs_cap.to(device, torch.float16))
+    # outputs_stream = get_vit_features(model, inputs_stream.to(device, torch.float16))
 
     print("Getting all results...")
     all_res = get_all_results(caps_filenames, caps_imgs, outputs_cap, streams_filenames, streams_imgs,
