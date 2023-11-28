@@ -47,6 +47,8 @@ def load_images_folder(folder_path):
 def process_input(images_list, processor):
     # print("Number of images")
     # print(len(images_list))
+    # inputs = processor(images=images_list, return_tensors="pt")
+    #If CLIP model:
     inputs = processor(text=["a photo of a cat"], images=images_list, return_tensors="pt")
     return inputs
 
@@ -97,7 +99,9 @@ def run_model_on_batch(list_images, processor, model):
         input = process_input(img, processor)
         # print("Computing features...")
         torch.cuda.empty_cache()
-        output = get_vit_features(model, input.to(device, torch.float16))
+        # output = get_vit_features(model, input.to(device, torch.float16))
+        # if CLIP used:
+        output = get_vit_features(model, input)
         outputs.append(output.cpu().detach().numpy())
     outputs = np.vstack(outputs)
     return outputs
