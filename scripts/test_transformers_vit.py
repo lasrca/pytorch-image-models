@@ -71,7 +71,7 @@ def get_filenames(source_dir):
     return l
 
 
-def get_all_results(caps_filenames, caps_images, outputs_caps, streams_filenames, streams_images, outputs_streams):
+def get_all_results(caps_filenames, outputs_caps, streams_filenames, outputs_streams):
     print("outputs_cap shape: ", len(outputs_caps))
     print("outputs_streams shape: ", len(outputs_streams))
 
@@ -84,14 +84,20 @@ def get_all_results(caps_filenames, caps_images, outputs_caps, streams_filenames
         for j, stream_filename in enumerate(streams_filenames):
             results[cap_filename][stream_filename] = similarities[i, j]
 
-    # for cap_filename, cap_img, cap in zip(caps_filenames, caps_images, outputs_caps):
-    #     cap_sess_id = cap_filename.split("_")[0]+"_cap"
-    #     results[cap_sess_id] = {}
-    #     for stream_filename, stream_img, stream in zip(streams_filenames, streams_images, outputs_streams):
-    #         cosine_similarity = get_cosine_similarity_for_two_images(cap.tolist(), stream.tolist())
-    #         stream_sess_id = stream_filename.split("_")[0] + "_stream"
-    #         results[cap_sess_id][stream_sess_id] = cosine_similarity
     return results
+
+
+def run_model_on_batch(list_images):
+    outputs = []
+    for img in tqdm(list_images):
+        # print("Processing input...")
+        input = process_input(img, processor)
+        # print("Computing features...")
+        torch.cuda.empty_cache()
+        output = get_vit_features(model, input.to(device, torch.float16))
+        outputs.append(output.cpu().detach().numpy())
+    outputs = np.vstack(outputs)
+    return outputs
 
 
 def main():
@@ -115,34 +121,23 @@ def main():
     model = model.to(device)
 
     print("Loading images...")
-    caps_imgs = load_images_folder(caps_path)[:5]
-    caps_filenames = get_filenames(caps_path)[:5]
-    streams_imgs = load_images_folder(streams_path)[:5]
-    streams_filenames = get_filenames(streams_path)[:5]
+    caps_imgs = load_images_folder(caps_path)
+    caps_filenames = get_filenames(caps_path)
+    streams_imgs = load_images_folder(streams_path)
+    streams_filenames = get_filenames(streams_path)
 
-    outputs_cap = []
+
     print("Processing captures...")
-    for cap in tqdm(caps_imgs):
-        # print("Processing input...")
-        input_cap = process_input(cap, processor)
-        # print("Computing features...")
-        output_cap = get_vit_features(model, input_cap.to(device, torch.float16))
-        outputs_cap.append(output_cap.cpu().detach().numpy())
-    outputs_cap = np.vstack(outputs_cap)
+    outputs_cap = run_model_on_batch(caps_imgs)
 
-    outputs_stream = []
+
     print("Processing streams...")
-    for stream in tqdm(streams_imgs):
-        # print("Processing input...")
-        input_stream = process_input(stream, processor)
-        # print("Computing features...")
-        output_stream = get_vit_features(model, input_stream.to(device, torch.float16))
-        outputs_stream.append(output_stream.cpu().detach().numpy())
-    outputs_stream = np.vstack(outputs_stream)
+    outputs_stream = run_model_on_batch(streams_imgs)
+
     # inputs_cap = process_input(caps_imgs, processor)
     # inputs_stream = process_input(streams_imgs, processor)
 
-    torch.cuda.empty_cache()
+    # torch.cuda.empty_cache()
 
     # print("Computing features...")
     # outputs_cap = get_vit_features(model, inputs_cap.to(device, torch.float16))
@@ -155,17 +150,6 @@ def main():
     print("Saving results to :" , path_to_results)
     pd.DataFrame(all_res).to_csv(path_to_results)
 
-    img1 = caps_imgs[3]
-    img_filename1 = caps_filenames[3]
-    stream1 = streams_imgs[2]
-    stream_filename1 = streams_filenames[2]
-    input_cap1 = process_input(img1, processor)
-    output_cap1 = get_vit_features(model, input_cap1.to(device, torch.float16))
-    input_stream1 = process_input(stream1, processor)
-    output_stream1 = get_vit_features(model, input_stream1.to(device, torch.float16))
-    print(img_filename1)
-    print(stream_filename1)
-    print(get_cosine_similarity_for_two_images(output_cap1.tolist(), output_stream1.tolist()))
 
 
 if __name__ == '__main__':
