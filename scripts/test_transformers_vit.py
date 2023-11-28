@@ -58,6 +58,7 @@ def get_vit_features(model, inputs):
         with autocast():
             outputs = model(**inputs)
             # logits = outputs.logits
+            #If CLIP is used:
             image_embedding = outputs.last_hidden_state[:, 0, :]
             print(image_embedding.shape)
     return image_embedding
@@ -101,7 +102,7 @@ def run_model_on_batch(list_images, processor, model):
         torch.cuda.empty_cache()
         # output = get_vit_features(model, input.to(device, torch.float16))
         # if CLIP used:
-        output = get_vit_features(model, input)
+        output = get_vit_features(model, input.to(device))
         outputs.append(output.cpu().detach().numpy())
     outputs = np.vstack(outputs)
     return outputs
