@@ -116,10 +116,10 @@ def main():
     model = model.to(device)
 
     print("Loading images...")
-    caps_imgs = load_images_folder(caps_path)
-    caps_filenames = get_filenames(caps_path)
-    streams_imgs = load_images_folder(streams_path)
-    streams_filenames = get_filenames(streams_path)
+    caps_imgs = load_images_folder(caps_path)[:5]
+    caps_filenames = get_filenames(caps_path)[:5]
+    streams_imgs = load_images_folder(streams_path)[:5]
+    streams_filenames = get_filenames(streams_path)[:5]
 
     outputs_cap = []
     print("Processing captures...")
