@@ -74,9 +74,7 @@ def get_filenames(source_dir):
 def get_all_results(caps_filenames, caps_images, outputs_caps, streams_filenames, streams_images, outputs_streams):
     print("outputs_cap shape: ", len(outputs_caps))
     print("outputs_streams shape: ", len(outputs_streams))
-    outputs_caps =  [t.detach().cpu().numpy() for t in outputs_caps]
-    outputs_streams = [t.detach().cpu().numpy() for t in outputs_streams]
-    print(outputs_caps[0].shape)
+
     similarities = cosine_similarity(outputs_caps, outputs_streams)
 
     results = {}
@@ -129,7 +127,7 @@ def main():
         input_cap = process_input(cap, processor)
         # print("Computing features...")
         output_cap = get_vit_features(model, input_cap.to(device, torch.float16))
-        outputs_cap.append(output_cap)
+        outputs_cap.append(output_cap.cpu().detach().numpy())
 
     outputs_stream = []
     print("Processing streams...")
@@ -138,7 +136,7 @@ def main():
         input_stream = process_input(stream, processor)
         # print("Computing features...")
         output_stream = get_vit_features(model, input_stream.to(device, torch.float16))
-        outputs_stream.append(output_stream)
+        outputs_stream.append(output_stream.cpu().detach().numpy())
     # inputs_cap = process_input(caps_imgs, processor)
     # inputs_stream = process_input(streams_imgs, processor)
 
