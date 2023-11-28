@@ -12,7 +12,7 @@ from tqdm import tqdm
 import torch
 import argparse
 import numpy as np
-
+from sklearn.metrics.pairwise import cosine_similarity
 
 torch.cuda.empty_cache()
 
@@ -74,14 +74,22 @@ def get_filenames(source_dir):
 def get_all_results(caps_filenames, caps_images, outputs_caps, streams_filenames, streams_images, outputs_streams):
     print("outputs_cap shape: ", len(outputs_caps))
     print("outputs_streams shape: ", len(outputs_streams))
+    similarities = cosine_similarity(outputs_cap, outputs_stream)
+
     results = {}
-    for cap_filename, cap_img, cap in zip(caps_filenames, caps_images, outputs_caps):
-        cap_sess_id = cap_filename.split("_")[0]+"_cap"
-        results[cap_sess_id] = {}
-        for stream_filename, stream_img, stream in zip(streams_filenames, streams_images, outputs_streams):
-            cosine_similarity = get_cosine_similarity_for_two_images(cap.tolist(), stream.tolist())
-            stream_sess_id = stream_filename.split("_")[0] + "_stream"
-            results[cap_sess_id][stream_sess_id] = cosine_similarity
+    for cap_filename, row in zip(caps_filenames, similarities):
+        results[cap_filename] = {}
+        res_cap = [float(i) for i in row.split(" ")]
+        for stream_filename, res_stream in zip(streams_filenames, res_cap):
+            results[cap_filename][stream_filename] = res_stream
+
+    # for cap_filename, cap_img, cap in zip(caps_filenames, caps_images, outputs_caps):
+    #     cap_sess_id = cap_filename.split("_")[0]+"_cap"
+    #     results[cap_sess_id] = {}
+    #     for stream_filename, stream_img, stream in zip(streams_filenames, streams_images, outputs_streams):
+    #         cosine_similarity = get_cosine_similarity_for_two_images(cap.tolist(), stream.tolist())
+    #         stream_sess_id = stream_filename.split("_")[0] + "_stream"
+    #         results[cap_sess_id][stream_sess_id] = cosine_similarity
     return results
 
 
@@ -123,9 +131,9 @@ def main():
     outputs_stream = []
     print("Processing streams...")
     for stream in tqdm(streams_imgs):
-        print("Processing input...")
+        # print("Processing input...")
         input_stream = process_input(stream, processor)
-        print("Computing features...")
+        # print("Computing features...")
         output_stream = get_vit_features(model, input_stream.to(device, torch.float16))
         outputs_stream.append(output_stream)
     # inputs_cap = process_input(caps_imgs, processor)
