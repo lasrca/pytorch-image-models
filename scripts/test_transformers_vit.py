@@ -79,11 +79,10 @@ def get_all_results(caps_filenames, caps_images, outputs_caps, streams_filenames
     print(similarities.shape)
 
     results = {}
-    for cap_filename, row in zip(caps_filenames, similarities):
+    for i, cap_filename in enumerate(caps_filenames):
         results[cap_filename] = {}
-        res_cap = [float(i) for i in row.split(" ")]
-        for stream_filename, res_stream in zip(streams_filenames, res_cap):
-            results[cap_filename][stream_filename] = res_stream
+        for j, stream_filename in enumerate(streams_filenames):
+            results[cap_filename][stream_filename] = results[i, j]
 
     # for cap_filename, cap_img, cap in zip(caps_filenames, caps_images, outputs_caps):
     #     cap_sess_id = cap_filename.split("_")[0]+"_cap"
