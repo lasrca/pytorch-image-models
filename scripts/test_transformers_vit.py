@@ -124,11 +124,11 @@ def main():
 
     print("Loading model and processor...")
     # processor = ViTImageProcessor.from_pretrained(model_name)
-    # processor = AutoImageProcessor.from_pretrained(model_name)
-    processor = CLIPProcessor.from_pretrained(model_name)
+    processor = AutoImageProcessor.from_pretrained(model_name)
+    # processor = CLIPProcessor.from_pretrained(model_name)
     # model = ViTForImageClassification.from_pretrained(model_name)
-    # model = BeitForImageClassification.from_pretrained(model_name)
-    model = CLIPModel.from_pretrained(model_name)
+    model = BeitForImageClassification.from_pretrained(model_name)
+    # model = CLIPModel.from_pretrained(model_name)
 
     model = model.to(device)
 
