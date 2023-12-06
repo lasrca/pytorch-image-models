@@ -57,12 +57,13 @@ def get_vit_features(model, inputs):
     with torch.no_grad():
         with autocast():
             outputs = model(**inputs)
-            # logits = outputs.logits
+            logits = outputs.logits
             #If CLIP is used:
-            print(outputs.keys())
-            image_embedding = outputs.last_hidden_state[:, 0, :]
-            print(image_embedding.shape)
-    return image_embedding
+            # print(outputs.keys())
+            # image_embedding = outputs.last_hidden_state[:, 0, :]
+            # print(image_embedding.shape)
+    # return image_embedding
+    return logits
 
 
 def get_cosine_similarity_for_two_images(features_1, features_2):
