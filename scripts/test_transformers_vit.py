@@ -69,7 +69,7 @@ def get_vit_features(model, inputs):
 
 def get_clip_features(model, images_filenames):
     images_embeddings = []
-    for img_filename in images_filenames:
+    for img_filename in tqdm(images_filenames):
         image_embedding = model.encode(Image.open(img_filename))
     images_embeddings.append(image_embedding)
     return images_embeddings
