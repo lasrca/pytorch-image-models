@@ -67,10 +67,10 @@ def get_vit_features(model, inputs):
     return logits
 
 
-def get_clip_features(model, images_filenames):
+def get_clip_features(model, folder_path, images_filenames):
     images_embeddings = []
     for img_filename in tqdm(images_filenames):
-        image_embedding = model.encode(Image.open(img_filename))
+        image_embedding = model.encode(Image.open(os.path.join(folder_path, img_filename)))
     images_embeddings.append(image_embedding)
     return images_embeddings
 
@@ -153,11 +153,11 @@ def main():
 
     print("Processing captures...")
     # outputs_cap = run_model_on_batch(caps_imgs, processor, model)
-    outputs_cap = get_clip_features(model, caps_filenames)
+    outputs_cap = get_clip_features(model, caps_path, caps_filenames)
 
     print("Processing streams...")
     # outputs_stream = run_model_on_batch(streams_imgs, processor, model)
-    outputs_stream = get_clip_features(model, streams_filenames)
+    outputs_stream = get_clip_features(model, streams_path, streams_filenames)
 
     # inputs_cap = process_input(caps_imgs, processor)
     # inputs_stream = process_input(streams_imgs, processor)
