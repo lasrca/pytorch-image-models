@@ -156,12 +156,14 @@ def main():
     print("Processing captures...")
     # outputs_cap = run_model_on_batch(caps_imgs, processor, model)
     outputs_cap = get_clip_features(model, caps_path, caps_filenames)
-    print(outputs_cap.shape)
+    print(len(outputs_cap))
+    print(outputs_cap[0].shape)
 
     print("Processing streams...")
     # outputs_stream = run_model_on_batch(streams_imgs, processor, model)
     outputs_stream = get_clip_features(model, streams_path, streams_filenames)
-    print(outputs_stream.shape)
+    print(len(outputs_stream))
+    print(outputs_stream[0].shape)
 
     # inputs_cap = process_input(caps_imgs, processor)
     # inputs_stream = process_input(streams_imgs, processor)
