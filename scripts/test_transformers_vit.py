@@ -3,6 +3,7 @@ from transformers import ViTImageProcessor, ViTForImageClassification
 from transformers import AutoImageProcessor, BeitForImageClassification
 from transformers import CLIPProcessor, CLIPModel
 from  torch.cuda.amp import autocast
+from sentence_transformers import SentenceTransformer, util
 from PIL import Image
 import requests
 import glob
@@ -58,12 +59,20 @@ def get_vit_features(model, inputs):
         with autocast():
             outputs = model(**inputs)
             logits = outputs.logits
-            #If CLIP is used:
+            # If CLIP is used:
             # print(outputs.keys())
             # image_embedding = outputs.last_hidden_state[:, 0, :]
             # print(image_embedding.shape)
     # return image_embedding
     return logits
+
+
+def get_clip_features(model, images_filenames):
+    images_embeddings = []
+    for img_filename in images_filenames:
+        image_embedding = model.encode(Image.open(img_filename))
+    images_embeddings.append(image_embedding)
+    return images_embeddings
 
 
 def get_cosine_similarity_for_two_images(features_1, features_2):
@@ -125,28 +134,30 @@ def main():
 
     print("Loading model and processor...")
     # processor = ViTImageProcessor.from_pretrained(model_name)
-    processor = AutoImageProcessor.from_pretrained(model_name)
+    # processor = AutoImageProcessor.from_pretrained(model_name)
     # processor = CLIPProcessor.from_pretrained(model_name)
     # model = ViTForImageClassification.from_pretrained(model_name)
-    model = BeitForImageClassification.from_pretrained(model_name)
+    # model = BeitForImageClassification.from_pretrained(model_name)
     # model = CLIPModel.from_pretrained(model_name)
+    model = SentenceTransformer(model_name)
 
     model = model.to(device)
 
 
     print("Loading images...")
-    caps_imgs = load_images_folder(caps_path)
+    # caps_imgs = load_images_folder(caps_path)
     caps_filenames = get_filenames(caps_path)
-    streams_imgs = load_images_folder(streams_path)
+    # streams_imgs = load_images_folder(streams_path)
     streams_filenames = get_filenames(streams_path)
 
 
     print("Processing captures...")
-    outputs_cap = run_model_on_batch(caps_imgs, processor, model)
-
+    # outputs_cap = run_model_on_batch(caps_imgs, processor, model)
+    outputs_cap = get_clip_features(model, caps_filenames)
 
     print("Processing streams...")
-    outputs_stream = run_model_on_batch(streams_imgs, processor, model)
+    # outputs_stream = run_model_on_batch(streams_imgs, processor, model)
+    outputs_stream = get_clip_features(model, streams_filenames)
 
     # inputs_cap = process_input(caps_imgs, processor)
     # inputs_stream = process_input(streams_imgs, processor)
