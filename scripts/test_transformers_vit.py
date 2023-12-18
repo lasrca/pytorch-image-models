@@ -148,24 +148,20 @@ def main():
 
     print("Loading images...")
     # caps_imgs = load_images_folder(caps_path)
-    caps_filenames = get_filenames(caps_path)[:5]
+    caps_filenames = get_filenames(caps_path)
     # streams_imgs = load_images_folder(streams_path)
-    streams_filenames = get_filenames(streams_path)[:5]
+    streams_filenames = get_filenames(streams_path)
 
 
     print("Processing captures...")
     # outputs_cap = run_model_on_batch(caps_imgs, processor, model)
     outputs_cap = get_clip_features(model, caps_path, caps_filenames)
-    print(len(outputs_cap))
-    print(outputs_cap[0].shape)
     outputs_cap = np.array(outputs_cap)
     print(outputs_cap.shape)
 
     print("Processing streams...")
     # outputs_stream = run_model_on_batch(streams_imgs, processor, model)
     outputs_stream = get_clip_features(model, streams_path, streams_filenames)
-    print(len(outputs_stream))
-    print(outputs_stream[0].shape)
     outputs_stream = np.array(outputs_stream)
     print(outputs_stream.shape)
 
