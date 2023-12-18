@@ -104,6 +104,8 @@ def get_all_results(caps_filenames, outputs_caps, streams_filenames, outputs_str
     return results
 
 
+
+
 def run_model_on_batch(list_images, processor, model):
     outputs = []
     for img in tqdm(list_images):
@@ -146,18 +148,20 @@ def main():
 
     print("Loading images...")
     # caps_imgs = load_images_folder(caps_path)
-    caps_filenames = get_filenames(caps_path)
+    caps_filenames = get_filenames(caps_path)[:5]
     # streams_imgs = load_images_folder(streams_path)
-    streams_filenames = get_filenames(streams_path)
+    streams_filenames = get_filenames(streams_path)[:5]
 
 
     print("Processing captures...")
     # outputs_cap = run_model_on_batch(caps_imgs, processor, model)
     outputs_cap = get_clip_features(model, caps_path, caps_filenames)
+    print(outputs_cap.shape)
 
     print("Processing streams...")
     # outputs_stream = run_model_on_batch(streams_imgs, processor, model)
     outputs_stream = get_clip_features(model, streams_path, streams_filenames)
+    print(outputs_stream.shape)
 
     # inputs_cap = process_input(caps_imgs, processor)
     # inputs_stream = process_input(streams_imgs, processor)
