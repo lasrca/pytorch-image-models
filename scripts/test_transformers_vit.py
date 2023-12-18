@@ -71,7 +71,7 @@ def get_clip_features(model, folder_path, images_filenames):
     images_embeddings = []
     for img_filename in tqdm(images_filenames):
         image_embedding = model.encode(Image.open(os.path.join(folder_path, img_filename)))
-    images_embeddings.append(image_embedding)
+        images_embeddings.append(image_embedding)
     return images_embeddings
 
 
