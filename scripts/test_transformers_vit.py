@@ -147,22 +147,30 @@ def main():
 
 
     print("Loading images...")
-    # caps_imgs = load_images_folder(caps_path)
+    caps_imgs = load_images_folder(caps_path)
     caps_filenames = get_filenames(caps_path)
-    # streams_imgs = load_images_folder(streams_path)
+    streams_imgs = load_images_folder(streams_path)
     streams_filenames = get_filenames(streams_path)
 
 
     print("Processing captures...")
-    # outputs_cap = run_model_on_batch(caps_imgs, processor, model)
-    outputs_cap = get_clip_features(model, caps_path, caps_filenames)
-    outputs_cap = np.array(outputs_cap)
-    print(outputs_cap.shape)
+    if  "clip" in model_name:
+        outputs_cap = get_clip_features(model, caps_path, caps_filenames)
+        outputs_cap = np.array(outputs_cap)
+    else:
+        outputs_cap = run_model_on_batch(caps_imgs, processor, model)
+
+
 
     print("Processing streams...")
-    # outputs_stream = run_model_on_batch(streams_imgs, processor, model)
-    outputs_stream = get_clip_features(model, streams_path, streams_filenames)
-    outputs_stream = np.array(outputs_stream)
+
+    if "clip" in model_name:
+        outputs_stream = get_clip_features(model, streams_path, streams_filenames)
+        outputs_stream = np.array(outputs_stream)
+    else:
+        outputs_stream = run_model_on_batch(streams_imgs, processor, model)
+
+
     print(outputs_stream.shape)
 
 
